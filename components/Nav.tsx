@@ -2,34 +2,37 @@
 
 import Image from "next/image";
 import { ModeToggle } from "./ui/toggleMode";
+import { User } from "./user";
+
+import Link from "next/link";
 
 export default function Nav() {
     return (
         <header>
-            <nav>
-                <ul className='flex items-center justify-between'>
-                    <li>
-                        <a
-                            className='pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0'
-                            href='https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >
+            <nav className='py-6 border-b-2 border-slate-400 border-opacity-20'>
+                <div className='container mx-auto flex items-center justify-between'>
+                    <div>
+                        <Link href='/' className=' flex gap-2 items-center'>
                             <Image
-                                src='/vercel.svg'
-                                alt='Vercel Logo'
+                                src='/logo.svg'
+                                alt='app logo'
                                 className='dark:invert'
-                                width={80}
+                                width={40}
                                 height={24}
                                 priority
                             />
-                        </a>
-                    </li>
 
-                    <li>
-                        <ModeToggle />
-                    </li>
-                </ul>
+                            <span className='uppercase'>Banking app</span>
+                        </Link>
+                    </div>
+
+                    <div className='flex gap-5'>
+                        <div className='flex gap-5'>
+                            <ModeToggle />
+                            <User />
+                        </div>
+                    </div>
+                </div>
             </nav>
         </header>
     );
