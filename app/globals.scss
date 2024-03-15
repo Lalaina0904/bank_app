@@ -4,7 +4,7 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
+        --background: 44.49deg 39.93% 96.01%;
         --foreground: 222.2 84% 4.9%;
 
         --card: 0 0% 100%;
@@ -73,4 +73,13 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+@font-face {
+    font-family: "Satoshi";
+    src: url(/fonts/Satoshi-Regular.otf);
+}
+
+body {
+    font-family: "Satoshi", sans-serif;
+    color: rgb(var(--foreground-rgb));
 }
