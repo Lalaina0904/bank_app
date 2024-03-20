@@ -55,7 +55,7 @@ export default function Register() {
             return;
         }
 
-        router.push("/dashboard");
+        router.push("/newbie");
     }
 
     return (
@@ -134,6 +134,12 @@ export default function Register() {
                             className='cursor-pointer underline'
                         >
                             I already have an account{" "}
+                        </Link>
+                    </div>
+
+                    <div className='mt-2'>
+                        <Link href='/' className='underline'>
+                            Back to Home Page
                         </Link>
                     </div>
                 </div>

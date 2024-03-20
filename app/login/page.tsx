@@ -108,6 +108,12 @@ export default function Login() {
                             I don&apos;t have an account yet
                         </Link>
                     </div>
+
+                    <div className='mt-2'>
+                        <Link href='/' className='underline'>
+                            Back to Home Page
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
