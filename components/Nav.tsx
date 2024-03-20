@@ -9,10 +9,10 @@ import Link from "next/link";
 export default function Nav() {
     return (
         <header>
-            <nav className='py-6 border-b-2 border-slate-400 border-opacity-20'>
+            <nav className='py-6 border-b-2 border-slate-500 border-opacity-50'>
                 <div className='container mx-auto flex items-center justify-between'>
                     <div>
-                        <Link href='/' className=' flex gap-2 items-center'>
+                        <Link href='' className=' flex gap-2 items-center'>
                             <Image
                                 src='/logo.svg'
                                 alt='app logo'
@@ -21,8 +21,6 @@ export default function Nav() {
                                 height={24}
                                 priority
                             />
-
-                            <span className='uppercase'>Banking app</span>
                         </Link>
                     </div>
 
