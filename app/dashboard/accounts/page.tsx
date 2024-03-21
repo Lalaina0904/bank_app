@@ -61,12 +61,15 @@ import {
 } from "@/components/ui/table";
 
 import NewAccountForm from "@/components/newAccountForm";
+import axios from "axios";
 
-const data: Account[] = [
+/*
+*/
+/*const data: Account[] = [
     {
         id: "m5gr84i9",
-        firstname: "Mckenna",
-        lastname: "Hansen",
+        firstname: "Jean",
+        lastname: "bas",
         birthdate: "1990-12-12",
         amount: 316,
     },
@@ -98,7 +101,7 @@ const data: Account[] = [
         birthdate: "1990-12-12",
         amount: 721,
     },
-];
+];*/
 
 export type Account = {
     id: string;
@@ -188,13 +191,35 @@ export const columns: ColumnDef<Account>[] = [
 const Page = () => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
 
-    const [columnFilters, setColumnFilters] =
-        React.useState<ColumnFiltersState>([]);
+    const [columnFilters, setColumnFilters] =React.useState<ColumnFiltersState>([]);
 
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({});
 
     const [rowSelection, setRowSelection] = React.useState({});
+    const [account,setAccount]=React.useState<Account>({id:"",firstname:"",lastname:"",birthdate:"",amount:0});
+    const [accounts,setAccounts]=React.useState<Account[]>([])
+
+const getAllAccounts = async () => { 
+    const response = await axios.get("http://localhost:8080/accounts");
+    const accountData:Account[]=response.data.map((account:any)=>({
+        id:account.accountNumber,
+        firstname:account.clientName,
+        lastname:account.clientLastName,
+        birthdate:account.birthdate,
+        amount:account.monthlyNetIncome
+    }))
+    
+   setAccounts(accountData);
+
+}
+React.useEffect(() => {
+    getAllAccounts();
+    console.log(accounts);
+    
+}   ,[]);
+
+const data=accounts
+
 
     const table = useReactTable({
         data,
