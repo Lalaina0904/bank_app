@@ -25,7 +25,17 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 import {
     DropdownMenu,
@@ -39,6 +49,8 @@ import {
 
 import { Input } from "@/components/ui/input";
 
+import { Label } from "@/components/ui/label";
+
 import {
     Table,
     TableBody,
@@ -48,102 +60,87 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import NewAccountForm from "@/components/newAccountForm";
+
 const data: Account[] = [
     {
         id: "m5gr84i9",
+        firstname: "Mckenna",
+        lastname: "Hansen",
+        birthdate: "1990-12-12",
         amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
     },
     {
         id: "3u1reuv4",
+        firstname: "Silas",
+        lastname: "Bill",
+        birthdate: "1990-12-12",
         amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
     },
     {
         id: "derv1ws0",
+        firstname: "Dave",
+        lastname: "Smith",
+        birthdate: "1990-12-12",
         amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
     },
     {
         id: "5kma53ae",
+        firstname: "Angel",
+        lastname: "Cruz",
+        birthdate: "1990-12-12",
         amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
     },
     {
         id: "bhqecj4p",
+        firstname: "Carmen",
+        lastname: "Hernandez",
+        birthdate: "1990-12-12",
         amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
     },
 ];
 
 export type Account = {
     id: string;
+    firstname: string;
+    lastname: string;
+    birthdate: string;
     amount: number;
-    status: "pending" | "processing" | "success" | "failed";
-    email: string;
 };
 
 export const columns: ColumnDef<Account>[] = [
     {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) =>
-                    table.toggleAllPageRowsSelected(!!value)
-                }
-                aria-label='Select all'
-            />
-        ),
+        accessorKey: "id",
+        header: "ID Account",
         cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label='Select row'
-            />
+            <div className='capitalize'>{row.getValue("id")}</div>
         ),
-        enableSorting: false,
-        enableHiding: false,
     },
-
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "firstname",
+        header: "First Name",
         cell: ({ row }) => (
-            <div className='capitalize'>{row.getValue("status")}</div>
+            <div className='capitalize'>{row.getValue("firstname")}</div>
+        ),
+    },
+    {
+        accessorKey: "lastname",
+        header: "Last Name",
+        cell: ({ row }) => (
+            <div className='capitalize'>{row.getValue("lastname")}</div>
+        ),
+    },
+    {
+        accessorKey: "birthdate",
+        header: "Birthdate",
+        cell: ({ row }) => (
+            <div className='capitalize'>{row.getValue("birthdate")}</div>
         ),
     },
 
-    {
-        accessorKey: "email",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant='ghost'
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    Email
-                    <CaretSortIcon className='ml-2 h-4 w-4' />
-                </Button>
-            );
-        },
-        cell: ({ row }) => (
-            <div className='lowercase'>{row.getValue("email")}</div>
-        ),
-    },
     {
         accessorKey: "amount",
-        header: () => <div className='text-right'>Amount</div>,
+        header: () => <div>Amount</div>,
         cell: ({ row }) => {
             const amount = parseFloat(row.getValue("amount"));
 
@@ -153,9 +150,10 @@ export const columns: ColumnDef<Account>[] = [
                 currency: "USD",
             }).format(amount);
 
-            return <div className='text-right font-medium'>{formatted}</div>;
+            return <div className='font-medium'>{formatted}</div>;
         },
     },
+
     {
         id: "actions",
         enableHiding: false,
@@ -165,25 +163,21 @@ export const columns: ColumnDef<Account>[] = [
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' className='h-8 w-8 p-0'>
+                        <Button
+                            variant='ghost'
+                            className='h-8 w-8 p-0 text-center'
+                        >
                             <span className='sr-only'>Open menu</span>
-                            <DotsHorizontalIcon className='h-4 w-4' />
+                            <DotsHorizontalIcon className='h-5 w-5' />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                navigator.clipboard.writeText(Account.id)
-                            }
-                        >
-                            Copy Account ID
-                        </DropdownMenuItem>
+                        <DropdownMenuItem>Edit firstname</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>
-                            View Account details
-                        </DropdownMenuItem>
+                        <DropdownMenuItem>Edit lastname</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Edit amount</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
@@ -193,10 +187,13 @@ export const columns: ColumnDef<Account>[] = [
 
 const Page = () => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
+
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
+
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
+
     const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable({
@@ -218,33 +215,51 @@ const Page = () => {
         },
     });
 
-    // ---
-
     return (
-        <div className='relative mx-auto flex max-w-2xl flex-col gap-6'>
+        <div className='relative mx-auto flex px-0 lg:px-6 flex-col gap-6'>
             <div className='mb-6 flex flex-wrap gap-2'>
-                <div className='flex w-max cursor-pointer gap-2 items-center rounded-md border border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-800'>
-                    <p className='text-xm '>Add new account</p>
-                    <Plus size={16} />
+                <div className='w-max cursor-pointer text-sm text-neutral-800'>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant='default' className='flex gap-2 '>
+                                Add new account
+                                <Plus size={16} />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className='sm:max-w-[650px]'>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    {" "}
+                                    Let's create your new account 🚀
+                                </DialogTitle>
+                                <DialogDescription>
+                                    Please complete the form bellow
+                                </DialogDescription>
+                            </DialogHeader>
+                            {/* --- The form where we should add the new account --- */}
+                            <NewAccountForm />
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
             <div className='w-full'>
                 <div className='flex items-center py-4'>
                     <Input
-                        placeholder='Filter emails...'
+                        placeholder='Filter firstName...'
                         value={
                             (table
-                                .getColumn("email")
+                                .getColumn("firstname")
                                 ?.getFilterValue() as string) ?? ""
                         }
                         onChange={(event) =>
                             table
-                                .getColumn("email")
+                                .getColumn("firstname")
                                 ?.setFilterValue(event.target.value)
                         }
                         className='max-w-sm'
                     />
+
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='outline' className='ml-auto'>
@@ -273,6 +288,7 @@ const Page = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+
                 <div className='rounded-md border'>
                     <Table>
                         <TableHeader>
@@ -294,6 +310,7 @@ const Page = () => {
                                 </TableRow>
                             ))}
                         </TableHeader>
+
                         <TableBody>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
@@ -327,12 +344,7 @@ const Page = () => {
                     </Table>
                 </div>
                 <div className='flex items-center justify-end space-x-2 py-4'>
-                    <div className='flex-1 text-sm text-muted-foreground'>
-                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                        {table.getFilteredRowModel().rows.length} row(s)
-                        selected.
-                    </div>
-                    <div className='space-x-2'>
+                    <div className='space-x-2 '>
                         <Button
                             variant='outline'
                             size='sm'
@@ -341,6 +353,7 @@ const Page = () => {
                         >
                             Previous
                         </Button>
+
                         <Button
                             variant='outline'
                             size='sm'
@@ -356,74 +369,74 @@ const Page = () => {
     );
 };
 
-type IAccount = {
-    title: string;
-    author: string;
-    hearth: number;
-    comment: number;
-    date: string;
-    authorPic: string;
-    tag: string[];
-};
+// type IAccount = {
+//     title: string;
+//     author: string;
+//     hearth: number;
+//     comment: number;
+//     date: string;
+//     authorPic: string;
+//     tag: string[];
+// };
 
-function Account({
-    title,
-    author,
-    authorPic,
-    comment,
-    date,
-    hearth,
-    tag,
-}: IAccount) {
-    return (
-        <Link
-            href={"/dashboard/accounts/account"}
-            className='flex flex-col gap-6 rounded-md border bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800'
-        >
-            <div className='flex gap-2'>
-                <div className='flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full border-2 bg-white'>
-                    <Image
-                        className='h-auto w-full'
-                        width={40}
-                        height={40}
-                        src={authorPic}
-                        alt={""}
-                    />
-                </div>
-                <div>
-                    <p className='font-bold'>{author}</p>
-                    <p className='font-mono text-xs'>{date}</p>
-                </div>
-            </div>
-            <div className='flex flex-col gap-3 pl-14'>
-                <h1 className='text-2xl font-bold'>{title}</h1>
-                <div className='flex flex-wrap gap-1'>
-                    {tag.map((tag, index) => (
-                        <span
-                            key={index}
-                            className='flex items-center justify-center rounded-md bg-blue-50 p-1 px-2 text-sm leading-3 dark:bg-neutral-700 dark:text-neutral-300'
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-            </div>
-            <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
-                    <Heart absoluteStrokeWidth size={20} />
-                    <p>{hearth}</p>
-                </div>
-                <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
-                    <MessageSquare absoluteStrokeWidth size={20} />
-                    <p>{comment}</p>
-                </div>
-                <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
-                    <Bookmark absoluteStrokeWidth size={20} />
-                </div>
-            </div>
-        </Link>
-    );
-}
+// function Account({
+//     title,
+//     author,
+//     authorPic,
+//     comment,
+//     date,
+//     hearth,
+//     tag,
+// }: IAccount) {
+//     return (
+//         <Link
+//             href={"/dashboard/accounts/account"}
+//             className='flex flex-col gap-6 rounded-md border bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800'
+//         >
+//             <div className='flex gap-2'>
+//                 <div className='flex aspect-square w-12 items-center justify-center overflow-hidden rounded-full border-2 bg-white'>
+//                     <Image
+//                         className='h-auto w-full'
+//                         width={40}
+//                         height={40}
+//                         src={authorPic}
+//                         alt={""}
+//                     />
+//                 </div>
+//                 <div>
+//                     <p className='font-bold'>{author}</p>
+//                     <p className='font-mono text-xs'>{date}</p>
+//                 </div>
+//             </div>
+//             <div className='flex flex-col gap-3 pl-14'>
+//                 <h1 className='text-2xl font-bold'>{title}</h1>
+//                 <div className='flex flex-wrap gap-1'>
+//                     {tag.map((tag, index) => (
+//                         <span
+//                             key={index}
+//                             className='flex items-center justify-center rounded-md bg-blue-50 p-1 px-2 text-sm leading-3 dark:bg-neutral-700 dark:text-neutral-300'
+//                         >
+//                             {tag}
+//                         </span>
+//                     ))}
+//                 </div>
+//             </div>
+//             <div className='flex items-center justify-between'>
+//                 <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
+//                     <Heart absoluteStrokeWidth size={20} />
+//                     <p>{hearth}</p>
+//                 </div>
+//                 <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
+//                     <MessageSquare absoluteStrokeWidth size={20} />
+//                     <p>{comment}</p>
+//                 </div>
+//                 <div className='flex items-center gap-2 font-mono text-xs font-bold text-neutral-400'>
+//                     <Bookmark absoluteStrokeWidth size={20} />
+//                 </div>
+//             </div>
+//         </Link>
+//     );
+// }
 
 export default Page;
 
