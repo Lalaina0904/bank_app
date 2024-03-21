@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,30 +19,41 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { toast } from "@/components/ui/use-toast";
-
+import axios from "axios";
+import { url } from "inspector";
 const formSchema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    dateOfBirth: z.string(),
-    salary: z.number(),
-    accountID: z.string(),
+    clientName: z.string(),
+    clientLastName: z.string(),
+    birthdate: z.string(),
+    monthlyNetIncome: z.string(),
+    accountNumber:z.string(),
+
 });
 
 const NewAccountForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            firstName: "",
-            lastName: "",
-            dateOfBirth: "",
-            salary: 0,
-            accountID: "",
+            clientName:"",
+            clientLastName:"",
+            birthdate:"",
+            monthlyNetIncome:"",
+            accountNumber:"",
+
         },
     });
-
+ 
+    const createNewAccount=async (data:z.infer<typeof formSchema>)=>{
+        const response=await axios.post("http://localhost:8080/account",data)
+         console.log(response.data);
+         
+     }
+   
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
+        createNewAccount(values);
+        
         console.log(values);
 
         toast({
@@ -66,7 +77,7 @@ const NewAccountForm = () => {
                 >
                     <FormField
                         control={form.control}
-                        name='firstName'
+                        name='clientName'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>First name</FormLabel>
@@ -84,7 +95,7 @@ const NewAccountForm = () => {
                     />
                     <FormField
                         control={form.control}
-                        name='lastName'
+                        name='clientLastName'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Last name</FormLabel>
@@ -101,7 +112,7 @@ const NewAccountForm = () => {
                     />
                     <FormField
                         control={form.control}
-                        name='dateOfBirth'
+                        name='birthdate'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Date of birth</FormLabel>
@@ -118,7 +129,7 @@ const NewAccountForm = () => {
                     />
                     <FormField
                         control={form.control}
-                        name='salary'
+                        name='monthlyNetIncome'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Salary</FormLabel>
@@ -127,6 +138,7 @@ const NewAccountForm = () => {
                                         type='number'
                                         placeholder='0'
                                         {...field}
+                                        
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -136,7 +148,7 @@ const NewAccountForm = () => {
 
                     <FormField
                         control={form.control}
-                        name='accountID'
+                        name='accountNumber'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Account ID</FormLabel>
