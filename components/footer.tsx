@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 
 export default function Footer() {
     return (
-        <footer className='bg-foreground text-background'>
+        <footer className='bg-foreground text-neutral-400 dark:text-slate-700'>
             <div className='container mx-auto px-6'>
                 <div className='grid-cols-4 gap-5 py-8 md:grid'>
                     <div className='col-span-2'>
@@ -21,10 +21,15 @@ export default function Footer() {
                         <div className='flex gap-3.5'>
                             <Input
                                 type='email'
-                                className='w-1/2'
+                                className='w-1/2 bg-transparent placeholder:text-slate-700'
                                 placeholder='Your email'
                             />
-                            <Button variant='default'>Submit</Button>
+                            <Button
+                                variant='default'
+                                className='dark:bg-slate-200'
+                            >
+                                Submit
+                            </Button>
                         </div>
                     </div>
 
