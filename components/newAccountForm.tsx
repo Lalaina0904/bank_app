@@ -24,11 +24,19 @@ import { url } from "inspector";
 const formSchema = z.object({
     clientName: z.string(),
     clientLastName: z.string(),
-    birthdate: z.string(),
+    birthdate: z.string().refine((birthdate) => {
+        const age = calculateAge(new Date(birthdate));
+        return age >= 21;
+    },{message:"You must be at least 21 years old"}),
     monthlyNetIncome: z.string(),
     accountNumber:z.string(),
 
 });
+const calculateAge=(birthdate:Date)=>{
+    const diff = Date.now() - birthdate.getTime();
+    const age = new Date(diff);
+    return Math.abs(age.getUTCFullYear()-1970);
+ }
 
 const NewAccountForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
@@ -45,14 +53,19 @@ const NewAccountForm = () => {
  
     const createNewAccount=async (data:z.infer<typeof formSchema>)=>{
         const response=await axios.post("http://localhost:8080/account",data)
+
          console.log(response.data);
          
      }
+     
    
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         createNewAccount(values);
+        console.log(calculateAge(new Date(values.birthdate)));
+        
+        
         
         console.log(values);
 
