@@ -1,15 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Search, Heart, MessageSquare, Bookmark, Plus } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Plus } from "lucide-react";
 
-import {
-    CaretSortIcon,
-    ChevronDownIcon,
-    DotsHorizontalIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 import {
     ColumnDef,
@@ -25,13 +19,11 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-// import { Checkbox } from "@/components/ui/checkbox";
 
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -48,8 +40,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Input } from "@/components/ui/input";
-
-import { Label } from "@/components/ui/label";
 
 import {
     Table,

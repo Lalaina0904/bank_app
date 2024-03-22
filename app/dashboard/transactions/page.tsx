@@ -30,7 +30,7 @@ const Page = () => {
                 </Link>
             </div>
 
-            <div className='relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='relative'>
                 <Transaction
                     transactionId={"1"}
                     date={"9 Nov 2023"}
