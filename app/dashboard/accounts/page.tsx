@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus } from "lucide-react";
+import { Link, Plus } from "lucide-react";
 
 import { ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 
@@ -104,9 +104,9 @@ export type Account = {
 export const columns: ColumnDef<Account>[] = [
     {
         accessorKey: "id",
-        header: "ID Account",
+        header: "Account Number",
         cell: ({ row }) => (
-            <div className='capitalize'>{row.getValue("id")}</div>
+                 <div className='capitalize'> <a href={`/dashboard/accounts/${row.getValue("id")}`}>{row.getValue("id")}</a></div>
         ),
     },
     {
