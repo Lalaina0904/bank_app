@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 import {
     Form,
     FormControl,
@@ -29,7 +30,6 @@ const formSchema = z.object({
         return age >= 21;
     },{message:"You must be at least 21 years old"}),
     monthlyNetIncome: z.string(),
-    accountNumber:z.string(),
 
 });
 const calculateAge=(birthdate:Date)=>{
@@ -46,15 +46,17 @@ const NewAccountForm = () => {
             clientLastName:"",
             birthdate:"",
             monthlyNetIncome:"",
-            accountNumber:"",
 
         },
     });
  
     const createNewAccount=async (data:z.infer<typeof formSchema>)=>{
         const response=await axios.post("http://localhost:8080/account",data)
-
          console.log(response.data);
+         if(response.status===200){
+            window.location.href = "/dashboard/accounts";
+         }
+
          
      }
      
@@ -63,6 +65,7 @@ const NewAccountForm = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         createNewAccount(values);
+    
         console.log(calculateAge(new Date(values.birthdate)));
         
         
@@ -79,6 +82,7 @@ const NewAccountForm = () => {
                 </pre>
             ),
         });
+
     }
 
     return (
@@ -159,23 +163,7 @@ const NewAccountForm = () => {
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name='accountNumber'
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Account ID</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type='text'
-                                        placeholder='0'
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                  
 
                     <br />
 
