@@ -16,7 +16,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-export default function ProductDetailLayout({
+export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
@@ -97,8 +97,7 @@ function NavItem({ label, Icon, link }: INavItem) {
                 isVisited
                     ? "border-neutral-800 bg-white dark:text-neutral-900"
                     : "border-transparent"
-            }`}
-        >
+            }`}>
             {Icon}
             <p>{label}</p>
         </Link>
@@ -130,8 +129,7 @@ const MobileNavigation = () => {
                 className={`cursor-pointer overflow-hidden rounded bg-neutral-100 transition-all duration-200 ease-in ${
                     isOpen ? "h-64" : "h-0"
                 }`}
-                onClick={(event) => menuCloseClickHandler()}
-            >
+                onClick={(event) => menuCloseClickHandler()}>
                 <div className='my-10 flex flex-col font-bold text-neutral-700'>
                     <NavItem
                         link={"/dashboard"}
@@ -173,8 +171,7 @@ const MobileNavigation = () => {
 
             <div
                 className='flex w-full items-center justify-between rounded bg-neutral-200 p-2'
-                onClick={(event) => menuOpenClickHandler(event)}
-            >
+                onClick={(event) => menuOpenClickHandler(event)}>
                 <h1 className='text-sm font-bold text-neutral-700'>Menu</h1>
                 <Plus className={`${isOpen && "rotate-45"}`} />
             </div>

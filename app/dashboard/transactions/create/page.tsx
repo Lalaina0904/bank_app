@@ -5,7 +5,6 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { parse } from "path";
@@ -39,11 +38,11 @@ const Page = () => {
                 console.log(data);
             });
     };
-    const data={
-        amount:amount,
-        reason:"test",
-        date:date
-    }
+    const data = {
+        amount: amount,
+        reason: "test",
+        date: date,
+    };
 
     /*const sendData=async (idAccount:any)=>{
         try{    
@@ -59,21 +58,19 @@ const Page = () => {
     }*/
     return (
         <div>
-            <div className='flex flex-col min-h-screen overflow-hidden'>
+            <div>
                 <div className='w-full mx-auto bg-white lg:max-w-lg'>
-                    <Card>
-                        <div className='grid gap-4'>
-                            <div className='grid gap-2'>
-                                <Label htmlFor='account'>Compte</Label>
-                                <Input
-                                    id='account'
-                                    type='text'
-                                    placeholder='Sélectionnez un compte'
-                                    onChange={(e) => setAccount(e.target.value)}
-                                />
-                            </div>
-                            {
-                                /*
+                    <div className='grid gap-4'>
+                        <div className='grid gap-2'>
+                            <Label htmlFor='account'>Compte</Label>
+                            <Input
+                                id='account'
+                                type='text'
+                                placeholder='Sélectionnez un compte'
+                                onChange={(e) => setAccount(e.target.value)}
+                            />
+                        </div>
+                        {/*
                                   <div className='grid gap-2'>
                                 <Label htmlFor='date'>Date</Label>
                                 <Input
@@ -82,29 +79,26 @@ const Page = () => {
                                     onChange={(e) => setDate(e.target.value)}
                                 />
                             </div>
-                                 */
-                            }
-                            <div className='grid gap-2'>
-                                <Label htmlFor='time'>Reason</Label>
-                                <Input
-                                    id='text'
-                                    type='text'
-                                    onChange={(e) => setReason(e.target.value)}
-                                />
-                            </div>
-                            <div className='grid gap-2'>
-                                <Label htmlFor='amount'>
-                                    Montant à retirer
-                                </Label>
-                                <Input
-                                    id='amount'
-                                    type='number'
-                                    onChange={(e) =>
-                                        setAmount(parseInt(e.target.value))
-                                    }
-                                />
-                            </div>
-                           {/* <div className='grid gap-2'>
+                                 */}
+                        <div className='grid gap-2'>
+                            <Label htmlFor='time'>Reason</Label>
+                            <Input
+                                id='text'
+                                type='text'
+                                onChange={(e) => setReason(e.target.value)}
+                            />
+                        </div>
+                        <div className='grid gap-2'>
+                            <Label htmlFor='amount'>Montant à retirer</Label>
+                            <Input
+                                id='amount'
+                                type='number'
+                                onChange={(e) =>
+                                    setAmount(parseInt(e.target.value))
+                                }
+                            />
+                        </div>
+                        {/* <div className='grid gap-2'>
                                 <Label htmlFor='balance'>Solde</Label>
                                 <Input
                                     id='balance'
@@ -114,7 +108,7 @@ const Page = () => {
                                     }
                                 />
                             </div>*/}
-                            {/*<div className='grid gap-2'>
+                        {/*<div className='grid gap-2'>
                                 <Label htmlFor='credit'>Crédit autorisé</Label>
                                 <Input
                                     id='credit'
@@ -124,9 +118,10 @@ const Page = () => {
                                     }
                                 />
                                 </div>*/}
-                        </div>
-                        <Button onClick={handleSubmit}>Valider</Button>
-                    </Card>
+                    </div>
+                    <Button onClick={handleSubmit} className='mt-6'>
+                        Valider
+                    </Button>
                 </div>
             </div>
         </div>

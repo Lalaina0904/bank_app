@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 
+import { ArrowRight } from "lucide-react";
+
 const formSchema = z.object({
     email: z.string(),
     password: z.string().min(6),
@@ -64,8 +66,7 @@ export default function Login() {
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='space-y-6'
-                        >
+                            className='space-y-6'>
                             <FormField
                                 control={form.control}
                                 name='email'
@@ -103,15 +104,13 @@ export default function Login() {
                         </form>
                     </Form>
 
-                    <div className='mt-4'>
+                    <div className='mt-4 flex justify-between'>
                         <Link href='/register' className='underline'>
                             I don&apos;t have an account yet
                         </Link>
-                    </div>
 
-                    <div className='mt-2'>
-                        <Link href='/' className='underline'>
-                            Back to Home Page
+                        <Link href='/' className='ml-4 underline'>
+                            <ArrowRight />
                         </Link>
                     </div>
                 </div>
