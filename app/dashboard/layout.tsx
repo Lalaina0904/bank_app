@@ -42,12 +42,6 @@ export default function DashboardLayout({
                         />
 
                         <NavItem
-                            link={"/dashboard/transactions"}
-                            label={"Transactions"}
-                            Icon={<ArrowLeftRight size={20} />}
-                        />
-
-                        <NavItem
                             link={"/dashboard/investissements"}
                             label={"Investissements"}
                             Icon={<TrendingUp size={20} />}

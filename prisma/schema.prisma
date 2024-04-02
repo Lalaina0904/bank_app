@@ -13,49 +13,123 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+model user {
+  user_id        String         @id @default(uuid())
+  username       String?
+  email          String         @unique
+  password       String
+  email_verified DateTime?
+  image          String?
+  userLogs       user_log[]
+  sessions       session[]
+  bankAccounts   bank_account[]
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model user_log {
+  id                  String  @id @default(uuid())
+  user_id             String
+  type                String
+  provider            String
+  provider_account_id String
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
+
+  user user @relation(fields: [user_id], references: [user_id])
+
+  @@unique([provider, provider_account_id])
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  password      String
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+model session {
+  id            String   @id @default(uuid())
+  session_token String   @unique
+  user_id       String
+  expires       DateTime
+  user          user     @relation(fields: [user_id], references: [user_id])
 }
 
-model VerificationToken {
+model verification_token {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model bank_account {
+  account_number     BigInt        @id
+  client_name        String
+  client_last_name   String
+  birthdate          DateTime
+  monthly_net_income Float
+  is_eligible        Boolean       @default(false)
+  user_id            String
+  user               user          @relation(fields: [user_id], references: [user_id])
+  sold               sold[]
+  transactions       transaction[]
+  transfers          transfert[]
+}
+
+model sold {
+  id_sold    Int          @id @default(autoincrement())
+  balance    Float
+  date       DateTime
+  account_id BigInt
+  account    bank_account @relation(fields: [account_id], references: [account_number])
+}
+
+enum category_type {
+  debit
+  credit
+}
+
+model category {
+  id_category   Int           @id @default(autoincrement())
+  category_name String
+  category_type category_type
+  transactions  transaction[]
+}
+
+enum transaction_type {
+  debit
+  credit
+}
+
+model transaction {
+  reference      String           @id
+  type           transaction_type
+  amount         Float
+  date           DateTime
+  reason         String
+  account_number BigInt
+  account        bank_account     @relation(fields: [account_number], references: [account_number])
+  id_category    Int
+  category       category         @relation(fields: [id_category], references: [id_category])
+}
+
+enum transfert_status {
+  canceled
+  pending
+  success
+}
+
+model transfert {
+  reference         String           @id
+  reason            String
+  amount            Float
+  effective_date    DateTime
+  registration_date DateTime
+  status            transfert_status
+  account           BigInt
+  account_ref       bank_account     @relation(fields: [account], references: [account_number])
+}
+
+model interest_rate {
+  id_interest_rate Int   @id @default(autoincrement())
+  first_7days      Float
+  after_7days      Float
 }

@@ -5,18 +5,31 @@ const db = new PrismaClient();
 
 async function main() {
     const password = await bcrypt.hash("123456", 10);
-    const polaire = await db.user.create({
+    const userTest1 = await db.user.create({
         data: {
             email: "polaire@gmail.com",
-            name: "polaire",
+            username: "polaire",
             password,
         },
     });
 
-    console.table(polaire);
+    const bankAccountTest1 = await db.bank_account.create({
+        data: {
+            account_number: 123456789,
+            client_name: "John",
+            client_last_name: "Doe",
+            birthdate: new Date("1990-01-01"),
+            monthly_net_income: 2000,
+            is_eligible: true,
+            user_id: userTest1.user_id,
+        },
+    });
+
+    console.table(userTest1);
 }
 
 console.log("[DB]: seeding...🌱");
+
 main()
     .then(async () => {
         await db.$disconnect();

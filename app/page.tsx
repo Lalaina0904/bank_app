@@ -1,10 +1,23 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import Footer from "@/components/footer";
 import { Cards } from "@/components/cards";
+import Link from "next/link";
+
+import { useSession } from "next-auth/react";
+
+import { useRouter } from "next/router";
 
 export default function Home() {
+    const router = useRouter();
+    const { data: session, status } = useSession();
+
+    if (session) {
+        router.push("/dashboard");
+    }
+
     return (
         <main>
             <section className='container mx-auto py-24 flex gap-8'>
@@ -39,7 +52,7 @@ export default function Home() {
 
                         <div className='my-16'>
                             <Button className='px-10 text-lg pb-7 pt-6'>
-                                Get Started
+                                <Link href='/register'>Get Started</Link>
                             </Button>
                         </div>
                     </div>

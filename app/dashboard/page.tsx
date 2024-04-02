@@ -55,16 +55,16 @@ import { stat } from "fs";
 export default function Dashboard() {
     const { data: session, status } = useSession();
 
-    // if (status === "loading") {
-    //     return <div>Loading...</div>;
-    // }
-
-    if (!session) {
-        // return redirect("/404");
-        return redirect("/login");
+    if (status === "loading") {
+        return <div>Loading...</div>;
     }
 
     // const [date, setDate] = React.useState<Date | undefined>(new Date());
+
+    if (!session) {
+        redirect("/login");
+        return null;
+    }
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
