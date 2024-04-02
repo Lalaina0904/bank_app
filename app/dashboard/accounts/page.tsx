@@ -247,24 +247,12 @@ const Page = () => {
             <div className='mb-6 flex flex-wrap gap-2'>
                 <div className='w-max cursor-pointer text-sm text-neutral-800'>
                     <Dialog>
-                        <div className='flex justify-between'>
-                            <DialogTrigger asChild>
-                                <Button
-                                    variant='default'
-                                    className='flex gap-2 '>
-                                    Add new account
-                                    <Plus size={16} />
-                                </Button>
-                            </DialogTrigger>
-
-                            <div>
-                                <Button>
-                                    <Link href='/dashboard/accounts/transactions'>
-                                        Transactions
-                                    </Link>
-                                </Button>
-                            </div>
-                        </div>
+                        <DialogTrigger asChild>
+                            <Button variant='default' className='flex gap-2 '>
+                                Add new account
+                                <Plus size={16} />
+                            </Button>
+                        </DialogTrigger>
 
                         <DialogContent className='sm:max-w-[650px] bg-white dark:bg-background'>
                             <DialogHeader>
