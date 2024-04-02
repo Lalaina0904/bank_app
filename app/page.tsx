@@ -7,15 +7,17 @@ import { Cards } from "@/components/cards";
 import Link from "next/link";
 
 import { useSession } from "next-auth/react";
-
-import { useRouter } from "next/router";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-    const router = useRouter();
     const { data: session, status } = useSession();
 
+    if (status === "loading") {
+        return <div className='text-xl text-center my-16'>Loading ...</div>;
+    }
+
     if (session) {
-        router.push("/dashboard");
+        redirect("/dashboard");
     }
 
     return (
