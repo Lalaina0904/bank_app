@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import Footer from "@/components/footer";
 import { Cards } from "@/components/cards";
+import { QueryClient,QueryClientProvider } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -38,9 +40,11 @@ export default function Home() {
                         </div>
 
                         <div className='my-16'>
-                            <Button className='px-10 text-lg pb-7 pt-6'>
+                        <Link href="/dashboard">
+                        <Button className='px-10 text-lg pb-7 pt-6'>
                                 Get Started
                             </Button>
+                        </Link>
                         </div>
                     </div>
                 </div>

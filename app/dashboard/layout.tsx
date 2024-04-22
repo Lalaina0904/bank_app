@@ -24,6 +24,7 @@ export default function ProductDetailLayout({
     return (
         <>
             <div className='relative flex h-full'>
+
                 <div className='fixed bottom-0 z-20 flex w-full cursor-pointer flex-col gap-4 px-4 py-6 md:hidden'>
                     <MobileNavigation />
                 </div>
@@ -132,6 +133,7 @@ const MobileNavigation = () => {
                 }`}
                 onClick={(event) => menuCloseClickHandler()}
             >
+
                 <div className='my-10 flex flex-col font-bold text-neutral-700'>
                     <NavItem
                         link={"/dashboard"}

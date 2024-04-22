@@ -5,13 +5,12 @@ import * as React from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
+
 const Page = () => {
 const [account,setAccount]=React.useState({
-    clientName:"",
-    clientLastName:"",
-    birthdate:"",
-    monthlyNetIncome:"",
-    isEligible:"",
+    accountNumber:0,
+    accountName:"",
+    isEligible:false,
 
 });
 const [sold,setSold]=React.useState({
@@ -25,11 +24,9 @@ const id=pathname.split("/").pop()
 const getAccountInfo=async ()=>{
     const response=await axios.get(`http://localhost:8080/account/${id}`)
     setAccount({
-        clientName:response.data.clientName,
-        clientLastName:response.data.clientLastName,
-        birthdate:response.data.birthdate,
-        monthlyNetIncome:response.data.monthlyNetIncome,
-        isEligible:response.data.isEligible,
+       accountNumber:response.data.accountNumber,
+       accountName:response.data.accountName,
+       isEligible:response.data.isEligible
     });
 }
 const getActuallSold=async ()=>{
@@ -48,44 +45,33 @@ React.useEffect(()=>{
     getAccountInfo();
 },[])
     return (
-        <div className='flex flex-row content-between'>
-                <Link
-                    href={`/dashboard/accounts/${id}/withdrawal`}
-                    className='flex w-max cursor-pointer items-center gap-1 rounded-md border border-neutral-300 bg-neutral-50 p-3 text-sm text-neutral-800'
-                >
-                    <span className='text-xm font-mono font-bold'>
-                        Add Transactions
-                    </span>
-                    <Plus size={18} />
-                </Link>
-            <div className='flex gap-4'>
-            <h1 className='text-2xl font-bold'>Personnal Info</h1>
+<div className=''>
+              
+    <div className="grid grid-cols-2 gap-40   items-center">
+         <div className='border rounded-sm p-3'>
+                <h1 className='text-2xl font-bold'>Account info</h1>
 
-                <div className='flex flex-col gap-2'>
-                    <div>
-                        <span className='font-bold'>Name:</span>
-                        <span>{account.clientName}</span>
-                    </div>
-                    <div>
-                        <span className='font-bold'>Last Name:</span>
-                        <span>{account.clientLastName}</span>
-                    </div>
-                    <div>
-                        <span className='font-bold'>Birthdate:</span>
-                        <span>{account.birthdate}</span>
-                    </div>
-                    <div>
-                        <span className='font-bold'>Monthly Net Income:</span>
-                        <span>${account.monthlyNetIncome}</span>
-                    </div>
-                    <div>
-                        <span className='font-bold'>Eligiblility:</span>
-                        <span>{account.isEligible?"you are eligible to make withdrawal":"you can't make withdrawal for the moment"}</span>
+                <div>
+                    <div className='flex flex-col gap-2'>
+                           
+                            <div>
+                                <span className='font-bold'>account number:</span>
+                                <span>{account.accountNumber}</span>
+                            </div>
+                            <div>
+                                <span className='font-bold'>account name:</span>
+                                <span>{account.accountName}</span>
+                            </div>
+                            <div>
+                                <span className='font-bold'>status:</span>
+                                <span>{account.isEligible?"eligible to make loan":"not eligible to make loan"}</span>
+                            </div>
                     </div>
                 </div>
+                
             </div>
             {/* sold  */}
-            <div>
+            <div className="border rounded-sm p-3">
                 <div>
                     <span>Sold:</span>
                     <span> ${sold.actualSold}</span>
@@ -100,7 +86,8 @@ React.useEffect(()=>{
                     <span>{sold.loanInterest}</span>
                 </div>
             </div>
-        </div>
+    </div>
+</div>
     );
 };
 

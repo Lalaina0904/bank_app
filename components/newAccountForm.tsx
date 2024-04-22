@@ -23,14 +23,8 @@ import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { url } from "inspector";
 const formSchema = z.object({
-    clientName: z.string(),
-    clientLastName: z.string(),
-    birthdate: z.string().refine((birthdate) => {
-        const age = calculateAge(new Date(birthdate));
-        return age >= 21;
-    },{message:"You must be at least 21 years old"}),
-    monthlyNetIncome: z.string(),
-
+ accountName: z.string().nonempty(),
+ 
 });
 const calculateAge=(birthdate:Date)=>{
     const diff = Date.now() - birthdate.getTime();
@@ -42,16 +36,18 @@ const NewAccountForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            clientName:"",
-            clientLastName:"",
-            birthdate:"",
-            monthlyNetIncome:"",
-
+          accountName:"",
+          
         },
     });
  
     const createNewAccount=async (data:z.infer<typeof formSchema>)=>{
-        const response=await axios.post("http://localhost:8080/account",data)
+        const accountData={
+            idClient:"d6430dd9-46e0-475c-91b6-f66bd26d9bcd",
+            accountName:data.accountName,
+        }
+        
+        const response=await axios.post("http://localhost:8080/account",accountData)
          console.log(response.data);
          if(response.status===200){
             window.location.href = "/dashboard/accounts";
@@ -66,7 +62,7 @@ const NewAccountForm = () => {
         // ✅ This will be type-safe and validated.
         createNewAccount(values);
     
-        console.log(calculateAge(new Date(values.birthdate)));
+       // console.log(calculateAge(new Date(values.birthdate)));
         
         
         
@@ -94,10 +90,10 @@ const NewAccountForm = () => {
                 >
                     <FormField
                         control={form.control}
-                        name='clientName'
+                        name='accountName'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>First name</FormLabel>
+                                <FormLabel>account name</FormLabel>
                                 <FormControl>
                                     <Input
                                         type='text'
@@ -110,7 +106,9 @@ const NewAccountForm = () => {
                             </FormItem>
                         )}
                     />
-                    <FormField
+                    {
+                        /*
+                            <FormField
                         control={form.control}
                         name='clientLastName'
                         render={({ field }) => (
@@ -162,6 +160,8 @@ const NewAccountForm = () => {
                             </FormItem>
                         )}
                     />
+                        */
+                    }
 
                   
 
