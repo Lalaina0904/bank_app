@@ -6,13 +6,37 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
+
 const Page = () => {
+<<<<<<< HEAD
     const [account, setAccount] = React.useState({
         clientName: "",
         clientLastName: "",
         birthdate: "",
         monthlyNetIncome: "",
         isEligible: "",
+=======
+const [account,setAccount]=React.useState({
+    accountNumber:0,
+    accountName:"",
+    isEligible:false,
+
+});
+const [sold,setSold]=React.useState({
+    actualSold:"",
+    actualLoan:"",
+    loanInterest:"",
+
+});
+const pathname=usePathname()
+const id=pathname.split("/").pop()
+const getAccountInfo=async ()=>{
+    const response=await axios.get(`http://localhost:8080/account/${id}`)
+    setAccount({
+       accountNumber:response.data.accountNumber,
+       accountName:response.data.accountName,
+       isEligible:response.data.isEligible
+>>>>>>> feature/fetchData
     });
     const [sold, setSold] = React.useState({
         actualSold: "",
@@ -48,6 +72,7 @@ const Page = () => {
         getAccountInfo();
     }, []);
     return (
+<<<<<<< HEAD
         <div className='flex flex-col content-between'>
             <Link
                 href={`/dashboard/accounts/${id}/withdrawal`}
@@ -60,6 +85,42 @@ const Page = () => {
 
             <div className='flex flex-col w-full mt-10 gap-6 sm:flex-row'>
                 {/* personnal info */}
+=======
+<div className=''>
+              
+    <div className="grid grid-cols-2 gap-40   items-center">
+         <div className='border rounded-sm p-3'>
+                <h1 className='text-2xl font-bold'>Account info</h1>
+
+                <div>
+                    <div className='flex flex-col gap-2'>
+                           
+                            <div>
+                                <span className='font-bold'>account number:</span>
+                                <span>{account.accountNumber}</span>
+                            </div>
+                            <div>
+                                <span className='font-bold'>account name:</span>
+                                <span>{account.accountName}</span>
+                            </div>
+                            <div>
+                                <span className='font-bold'>status:</span>
+                                <span>{account.isEligible?"eligible to make loan":"not eligible to make loan"}</span>
+                            </div>
+                    </div>
+                </div>
+                
+            </div>
+            {/* sold  */}
+            <div className="border rounded-sm p-3">
+                <div>
+                    <span>Sold:</span>
+                    <span> ${sold.actualSold}</span>
+                </div>
+                <div>
+                    <span>Loan:</span>
+                    <span>{sold.actualLoan}</span>
+>>>>>>> feature/fetchData
 
                 <Card className='w-3/4'>
                     <div className='flex flex-col gap-4 p-4'>
@@ -115,7 +176,8 @@ const Page = () => {
                     </div>
                 </Card>
             </div>
-        </div>
+    </div>
+</div>
     );
 };
 

@@ -4,10 +4,15 @@ import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import Footer from "@/components/footer";
 import { Cards } from "@/components/cards";
+<<<<<<< HEAD
 import Link from "next/link";
 
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+=======
+import { QueryClient,QueryClientProvider } from "@tanstack/react-query";
+import Link from "next/link";
+>>>>>>> feature/fetchData
 
 export default function Home() {
     const { data: session, status } = useSession();
@@ -53,9 +58,16 @@ export default function Home() {
                         </div>
 
                         <div className='my-16'>
+<<<<<<< HEAD
                             <Button className='px-10 text-lg pb-7 pt-6'>
                                 <Link href='/register'>Get Started</Link>
+=======
+                        <Link href="/dashboard">
+                        <Button className='px-10 text-lg pb-7 pt-6'>
+                                Get Started
+>>>>>>> feature/fetchData
                             </Button>
+                        </Link>
                         </div>
                     </div>
                 </div>

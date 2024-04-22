@@ -51,6 +51,17 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  } from "@/components/ui/sheet"
+  import ClientInfo from "@/components/clientInfo";
 
 import NewAccountForm from "@/components/newAccountForm";
 import axios from "axios";
@@ -97,10 +108,10 @@ import axios from "axios";
 
 export type Account = {
     id: string;
-    firstname: string;
-    lastname: string;
-    birthdate: string;
-    amount: number;
+    name:string;
+    sold:number;
+    loan:number;
+    loanInterest:number;
 };
 
 export const columns: ColumnDef<Account>[] = [
@@ -117,37 +128,54 @@ export const columns: ColumnDef<Account>[] = [
         ),
     },
     {
-        accessorKey: "firstname",
-        header: "First Name",
+        accessorKey: "name",
+        header: "Account Name",
         cell: ({ row }) => (
-            <div className='capitalize'>{row.getValue("firstname")}</div>
+            <div className='capitalize'>{row.getValue("name")}</div>
         ),
     },
-    {
-        accessorKey: "lastname",
-        header: "Last Name",
-        cell: ({ row }) => (
-            <div className='capitalize'>{row.getValue("lastname")}</div>
-        ),
-    },
-    {
-        accessorKey: "birthdate",
-        header: "Birthdate",
-        cell: ({ row }) => (
-            <div className='capitalize'>{row.getValue("birthdate")}</div>
-        ),
-    },
+  
 
     {
-        accessorKey: "amount",
-        header: () => <div>Amount</div>,
+        accessorKey: "sold",
+        header: () => <div>Sold</div>,
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("amount"));
+            const amount = parseFloat(row.getValue("sold"));
 
             // Format the amount as a dollar amount
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
-                currency: "USD",
+                currency: "MGA",
+            }).format(amount);
+
+            return <div className='font-medium'>{formatted}</div>;
+        },
+    },
+    {
+        accessorKey: "loan",
+        header: () => <div>Loan</div>,
+        cell: ({ row }) => {
+            const amount = parseFloat(row.getValue("loan"));
+
+            // Format the amount as a dollar amount
+            const formatted = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "MGA",
+            }).format(amount);
+
+            return <div className='font-medium'>{formatted}</div>;
+        },
+    },
+    {
+        accessorKey: "loanInterest",
+        header: () => <div>Loan Interest</div>,
+        cell: ({ row }) => {
+            const amount = parseFloat(row.getValue("loanInterest"));
+
+            // Format the amount as a dollar amount
+            const formatted = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "MGA",
             }).format(amount);
 
             return <div className='font-medium'>{formatted}</div>;
@@ -170,14 +198,14 @@ export const columns: ColumnDef<Account>[] = [
                             <DotsHorizontalIcon className='h-5 w-5' />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
+                    <DropdownMenuContent>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit firstname</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Edit lastname</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Edit amount</DropdownMenuItem>
-                    </DropdownMenuContent>
+                        <DropdownMenuItem>
+                            <a href={`/dashboard/accounts/${Account.id}`}>
+                                View
+                            </a>
+                        </DropdownMenuItem>
+                   </DropdownMenuContent>
                 </DropdownMenu>
             );
         },
@@ -194,26 +222,23 @@ const Page = () => {
         React.useState<VisibilityState>({});
 
     const [rowSelection, setRowSelection] = React.useState({});
-    const [account, setAccount] = React.useState<Account>({
+    /*const [account, setAccount] = React.useState<Account>({
         id: "",
-        firstname: "",
-        lastname: "",
-        birthdate: "",
-        amount: 0,
-    });
+        name: ""
+        
+    });*/
     const [accounts, setAccounts] = React.useState<Account[]>([]);
 
     const getAllAccounts = async () => {
-        const response = await axios.get("http://localhost:8080/accounts");
-        const accountData: Account[] = response.data.map((account: any) => ({
-            id: account.accountNumber,
-            firstname: account.clientName,
-            lastname: account.clientLastName,
-            birthdate: account.birthdate,
-            amount: account.monthlyNetIncome,
-            user_id: account.userId,
-        }));
-
+        const response = await axios.get("http://localhost:8080/accounts/d6430dd9-46e0-475c-91b6-f66bd26d9bcd");
+        const accountData: Account[] = await Promise.all(
+            response.data.map(async (account: any) => {
+            const getActualSold=await axios.get(`http://localhost:8080/soldAndLoan/${account.accountNumber}`)
+            return {id:account.accountNumber,name:account.accountName,sold:getActualSold.data.sold,loan:getActualSold.data.loan,loanInterest:getActualSold.data.loanInterest}
+        })
+        );
+        
+        localStorage.setItem("accounts",JSON.stringify(accountData))
         setAccounts(accountData);
     };
     React.useEffect(() => {
@@ -243,8 +268,8 @@ const Page = () => {
     });
 
     return (
-        <div className='relative mx-auto flex px-0 lg:px-6 flex-col gap-6'>
-            <div className='mb-6 flex flex-wrap gap-2'>
+        <div className='relative mx-auto flex px-0 lg:px-6 flex-col gap-6 '>
+            <div className='mb-6 flex flex-wrap gap-2 justify-between'>
                 <div className='w-max cursor-pointer text-sm text-neutral-800'>
                     <Dialog>
                         <DialogTrigger asChild>
@@ -268,20 +293,35 @@ const Page = () => {
                         </DialogContent>
                     </Dialog>
                 </div>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button>user info</Button>
+                            </SheetTrigger>
+                                <SheetContent>
+                                    <SheetHeader>
+                                        <SheetTitle className="text-center">Personnal information</SheetTitle>
+                                            
+                                    </SheetHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <ClientInfo/>
+                                    </div>
+                         
+                                </SheetContent>
+                </Sheet>
             </div>
 
             <div className='w-full'>
                 <div className='flex items-center py-4'>
                     <Input
-                        placeholder='Filter firstName...'
+                        placeholder='Filter account...'
                         value={
                             (table
-                                .getColumn("firstname")
+                                .getColumn("accountName")
                                 ?.getFilterValue() as string) ?? ""
                         }
                         onChange={(event) =>
                             table
-                                .getColumn("firstname")
+                                .getColumn("accountName")
                                 ?.setFilterValue(event.target.value)
                         }
                         className='max-w-sm'
