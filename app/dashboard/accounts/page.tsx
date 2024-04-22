@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Plus } from "lucide-react";
+import { Link, Plus } from "lucide-react";
 
 import { ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-
-import Link from "next/link";
 
 import {
     ColumnDef,
@@ -119,12 +117,7 @@ export const columns: ColumnDef<Account>[] = [
         accessorKey: "id",
         header: "Account Number",
         cell: ({ row }) => (
-            <div className='capitalize'>
-                {" "}
-                <a href={`/dashboard/accounts/${row.getValue("id")}`}>
-                    {row.getValue("id")}
-                </a>
-            </div>
+                 <div className='capitalize'> <a href={`/dashboard/accounts/${row.getValue("id")}`}>{row.getValue("id")}</a></div>
         ),
     },
     {
@@ -193,7 +186,8 @@ export const columns: ColumnDef<Account>[] = [
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant='ghost'
-                            className='h-8 w-8 p-0 text-center'>
+                            className='h-8 w-8 p-0 text-center'
+                        >
                             <span className='sr-only'>Open menu</span>
                             <DotsHorizontalIcon className='h-5 w-5' />
                         </Button>
@@ -278,7 +272,6 @@ const Page = () => {
                                 <Plus size={16} />
                             </Button>
                         </DialogTrigger>
-
                         <DialogContent className='sm:max-w-[650px] bg-white dark:bg-background'>
                             <DialogHeader>
                                 <DialogTitle>
@@ -346,7 +339,8 @@ const Page = () => {
                                             checked={column.getIsVisible()}
                                             onCheckedChange={(value) =>
                                                 column.toggleVisibility(!!value)
-                                            }>
+                                            }
+                                        >
                                             {column.id}
                                         </DropdownMenuCheckboxItem>
                                     );
@@ -384,7 +378,8 @@ const Page = () => {
                                         key={row.id}
                                         data-state={
                                             row.getIsSelected() && "selected"
-                                        }>
+                                        }
+                                    >
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>
                                                 {flexRender(
@@ -399,7 +394,8 @@ const Page = () => {
                                 <TableRow>
                                     <TableCell
                                         colSpan={columns.length}
-                                        className='h-24 text-center'>
+                                        className='h-24 text-center'
+                                    >
                                         No results.
                                     </TableCell>
                                 </TableRow>
@@ -413,7 +409,8 @@ const Page = () => {
                             variant='outline'
                             size='sm'
                             onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}>
+                            disabled={!table.getCanPreviousPage()}
+                        >
                             Previous
                         </Button>
 
@@ -421,7 +418,8 @@ const Page = () => {
                             variant='outline'
                             size='sm'
                             onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}>
+                            disabled={!table.getCanNextPage()}
+                        >
                             Next
                         </Button>
                     </div>

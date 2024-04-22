@@ -18,8 +18,6 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 
-import { ArrowRight } from "lucide-react";
-
 const formSchema = z.object({
     email: z.string(),
     name: z.optional(z.string()),
@@ -73,7 +71,8 @@ export default function Register() {
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='space-y-6'>
+                            className='space-y-6'
+                        >
                             <FormField
                                 control={form.control}
                                 name='email'
@@ -129,15 +128,18 @@ export default function Register() {
                         </form>
                     </Form>
 
-                    <div className='mt-4 flex justify-between'>
+                    <div className='mt-4'>
                         <Link
                             href='/login'
-                            className='cursor-pointer underline'>
+                            className='cursor-pointer underline'
+                        >
                             I already have an account{" "}
                         </Link>
+                    </div>
 
-                        <Link href='/' className='ml-4 underline'>
-                            <ArrowRight />
+                    <div className='mt-2'>
+                        <Link href='/' className='underline'>
+                            Back to Home Page
                         </Link>
                     </div>
                 </div>
